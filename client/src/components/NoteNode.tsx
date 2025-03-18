@@ -1,5 +1,5 @@
 import { enhanceApi, deleteNoteApi } from '@/services/api/notesApi';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';  
 import { showToast } from '@/util/toast/Toast';
 import NoteModal from './modal/NoteModal';
 import { NoteNodeProps } from '@/types/types';
@@ -58,8 +58,8 @@ const NoteNode: React.FC<NoteNodeProps> = ({ data, id }) => {
 
     setLoadingPrompt(true);
     try {
-      const response = await enhanceApi(enhancementPrompt, localContent);
-      const enhancedContent = response.data.choices[0].message.content;
+      const data = await enhanceApi(enhancementPrompt, localContent);
+      const enhancedContent = data.choices[0].message.content;
       setLocalContent(enhancedContent);
       handleChange(localTitle, enhancedContent);
     } catch (error) {
@@ -79,9 +79,8 @@ const NoteNode: React.FC<NoteNodeProps> = ({ data, id }) => {
       if (response.success) {
         showToast.success('Note deleted successfully');
         setIsModalOpen(false);
-        // Call the onDelete function passed from the parent component
         if (data.onDelete) {
-          data.onDelete();
+          data.onDelete(id);
         }
       } else {
         showToast.error('Failed to delete note');
@@ -132,7 +131,7 @@ const NoteNode: React.FC<NoteNodeProps> = ({ data, id }) => {
         <div className="w-full min-h-28 p-2 max-h-36 overflow-hidden rounded-md bg-indigo-50 mb-2">
           {loadingPrompt ? (
             <div className="flex justify-center items-center h-28">
-              <div className="w-8 h-8 border-3 border-t-blue-500 border-blue-200 rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-b-2 border-t-blue-500 border-blue-200 rounded-full animate-spin"></div>
             </div>
           ) : (
             <div className="line-clamp-4 text-gray-600 font-light leading-relaxed">

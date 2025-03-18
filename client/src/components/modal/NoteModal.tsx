@@ -113,7 +113,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
         
         <div className="p-6 border-t border-gray-100 flex justify-end items-center">
           <div className="flex gap-3">
-            {isEnhancing ? (
+            {isEnhancing  ? (
               <>
                 <button
                   className="px-5 py-2.5 text-xs rounded-md bg-emerald-500 hover:bg-emerald-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
@@ -131,13 +131,14 @@ const NoteModal: React.FC<NoteModalProps> = ({
                 </button>
               </>
             ) : (
+              content ?
               <button
                 className="px-5 py-2.5 text-xs rounded-md bg-[#53418ddc] hover:bg-[#53418d] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                 onClick={onEnhance}
                 disabled={isLoading}
               >
                 AI Enhance
-              </button>
+              </button>:''
             )}
             <button
               className="px-5 py-2.5 rounded-md text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium"

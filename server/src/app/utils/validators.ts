@@ -1,10 +1,6 @@
-import { Request } from 'express';
 import { check, ValidationChain } from 'express-validator';
 
-
-
 const userValidator: ValidationChain[] = [
-  // Signup Validations
   check('email')
     .isEmail()
     .withMessage('Invalid email format')
@@ -13,9 +9,7 @@ const userValidator: ValidationChain[] = [
     .notEmpty()
     .withMessage('Email is required'),
 
-  check('name')
-    .notEmpty()
-    .withMessage('Name is required'),
+  check('name').notEmpty().withMessage('Name is required'),
 
   check('password')
     .isLength({ min: 6 })
@@ -36,8 +30,5 @@ const userValidator: ValidationChain[] = [
     })
     .notEmpty()
     .withMessage('Confirm password is required'),
-
-  // Personal Info Validations
- 
 ];
-export {  userValidator };
+export { userValidator };

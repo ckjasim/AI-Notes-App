@@ -1,34 +1,39 @@
 import { baseURL } from '../interceptors/api';
 
-export const enhanceApi = async (enhancementPrompt:string, localContent:string) => {
+export const enhanceApi = async (
+  enhancementPrompt: string,
+  localContent: string
+) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_OPENROUTER_URL}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API}`, // Ensure this is correct
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-r1:free", // Ensure DeepSeek is used
+        model: 'deepseek/deepseek-r1:free',
         messages: [
-          { role: "system", content: "You are an expert content enhancer. Follow the given instruction carefully while improving the content's quality, clarity, and coherence." },
-          { role: "user", content: `${enhancementPrompt}\n\nContent:\n${localContent}` }
+          {
+            role: 'system',
+            content:
+              "You are an expert content enhancer. Follow the given instruction carefully while improving the content's quality, clarity, and coherence.",
+          },
+          {
+            role: 'user',
+            content: `${enhancementPrompt}\n\nContent:\n${localContent}`,
+          },
         ],
       }),
     });
-
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-     
-    return response
-    
+    return await response.json();
   } catch (error) {
-    console.error("Error enhancing note:", error);
-  }}
-export const updatePositionApi = async (position:any,id: string) => {
+    console.error('Error enhancing note:', error);
+  }
+};
+export const updatePositionApi = async (position: any, id: string) => {
   try {
-    const response = await baseURL.put(`notes/${id}/position`,position);
+    const response = await baseURL.put(`notes/${id}/position`, position);
     return response.data;
   } catch (error) {
     console.error('Error logging out:', error);
@@ -46,16 +51,16 @@ export const deleteNoteApi = async (id: string) => {
 };
 export const saveNoteApi = async (data: any) => {
   try {
-    const response = await baseURL.post(`notes`,data);
+    const response = await baseURL.post(`notes`, data);
     return response.data;
-  } catch (error) { 
+  } catch (error) {
     console.error('Error logging out:', error);
     throw error;
   }
 };
-export const updateNoteApi = async (data:any,id: string) => {
+export const updateNoteApi = async (data: any, id: string) => {
   try {
-    const response = await baseURL.put(`notes/${id}`,data);
+    const response = await baseURL.put(`notes/${id}`, data);
     return response.data;
   } catch (error) {
     console.error('Error logging out:', error);
@@ -71,5 +76,3 @@ export const fetchNoteApi = async (id: string) => {
     throw error;
   }
 };
-
-

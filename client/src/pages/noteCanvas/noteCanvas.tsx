@@ -1,15 +1,20 @@
-import NoteNode from '@/components/noteNode';
+import NoteNode from '@/components/NoteNode';
 import { LogoutUser } from '@/redux/features/auth/authSlice';
 import { RootState } from '@/redux/store';
-import { fetchNoteApi, saveNoteApi, updateNoteApi, updatePositionApi } from '@/services/api/notesApi';
+import {
+  fetchNoteApi,
+  saveNoteApi,
+  updateNoteApi,
+  updatePositionApi,
+} from '@/services/api/notesApi';
 import { showToast } from '@/util/toast/Toast';
 import { LogOut } from 'lucide-react';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import ReactFlow, { 
-  Controls, 
-  Background,  
+import ReactFlow, {
+  Controls,
+  Background,
   useNodesState,
   Panel,
   Node,
@@ -29,9 +34,12 @@ const NoteCanvas: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleDeleteNote = useCallback((id: string) => {
-    setNodes((nds) => nds.filter(node => node.id !== id));
-  }, [setNodes]);
+  const handleDeleteNote = useCallback(
+    (id: string) => {
+      setNodes((nds) => nds.filter((node) => node.id !== id));
+    },
+    [setNodes]
+  );
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -45,16 +53,20 @@ const NoteCanvas: React.FC = () => {
               ...node,
               data: {
                 ...node.data,
-                updateNote: (title: string, content: string) => handleNoteUpdate(node.id, title, content),
-                onDelete: () => handleDeleteNote(node.id)
+                updateNote: (title: string, content: string) =>
+                  handleNoteUpdate(node.id, title, content),
+                onDelete: () => handleDeleteNote(node.id),
               },
             }));
             setNodes(reconstructedNodes);
 
-            const highestId = reconstructedNodes.reduce((max:any, node:any) => {
-              const idNum = parseInt(node.id.split('-')[1]);
-              return idNum > max ? idNum : max;
-            }, 0);
+            const highestId = reconstructedNodes.reduce(
+              (max: any, node: any) => {
+                const idNum = parseInt(node.id.split('-')[1]);
+                return idNum > max ? idNum : max;
+              },
+              0
+            );
             setNoteIdCounter(highestId + 1);
           }
         } else {
@@ -69,27 +81,36 @@ const NoteCanvas: React.FC = () => {
     fetchNotes();
   }, [setNodes, handleDeleteNote, userInfo.id]);
 
-  const handleNoteUpdate = useCallback(async (id: string, title: string, content: string) => {
-    try {
-      await updateNoteApi({ title, content }, id);
-    } catch (error) {
-      console.error(`Error updating note ${id}:`, error);
-    }
-  }, []);
+  const handleNoteUpdate = useCallback(
+    async (id: string, title: string, content: string) => {
+      try {
+        await updateNoteApi({ title, content }, id);
+      } catch (error) {
+        console.error(`Error updating note ${id}:`, error);
+      }
+    },
+    []
+  );
 
-  const handleNodeDragStop = useCallback(async (_event: React.MouseEvent, node: Node) => {
-    try {
-      await updatePositionApi(node.position, node.id);
-    } catch (error) {
-      console.error(`Error updating position for note ${node.id}:`, error);
-    }
-  }, []);
+  const handleNodeDragStop = useCallback(
+    async (_event: React.MouseEvent, node: Node) => {
+      try {
+        await updatePositionApi(node.position, node.id);
+      } catch (error) {
+        console.error(`Error updating position for note ${node.id}:`, error);
+      }
+    },
+    []
+  );
 
   const addNewNote = useCallback(async () => {
     try {
       const response = await saveNoteApi({
         node: {
-          position: { x: 100 + Math.random() * 100, y: 100 + Math.random() * 100 },
+          position: {
+            x: 100 + Math.random() * 100,
+            y: 100 + Math.random() * 100,
+          },
           data: {
             title: 'New Note',
             content: '',
@@ -105,8 +126,9 @@ const NoteCanvas: React.FC = () => {
         data: {
           title: 'New Note',
           content: '',
-          updateNote: (title: string, content: string) => handleNoteUpdate(id, title, content),
-          onDelete: () => handleDeleteNote(id)
+          updateNote: (title: string, content: string) =>
+            handleNoteUpdate(id, title, content),
+          onDelete: () => handleDeleteNote(id),
         },
       };
       setNodes((nds) => [...nds, newNode]);
@@ -114,7 +136,13 @@ const NoteCanvas: React.FC = () => {
     } catch (error) {
       console.error('Error saving new note:', error);
     }
-  }, [noteIdCounter, setNodes, handleDeleteNote, handleNoteUpdate, userInfo.id]);
+  }, [
+    noteIdCounter,
+    setNodes,
+    handleDeleteNote,
+    handleNoteUpdate,
+    userInfo.id,
+  ]);
 
   const logout = async () => {
     try {
@@ -129,9 +157,10 @@ const NoteCanvas: React.FC = () => {
   return (
     <div className="w-full h-screen">
       {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-xl">Loading your notes...</div>
-        </div>
+         <div className="flex mt-64 justify-center items-center h-32 gap-2">
+         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+         <p className='text-sm font-semibold '>Loading...</p>
+       </div>
       ) : (
         <ReactFlow
           nodes={nodes}
@@ -141,17 +170,19 @@ const NoteCanvas: React.FC = () => {
           fitView
         >
           <Controls />
-          <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
+          <Background variant={BackgroundVariant.Cross} gap={12} size={1} style={{ backgroundColor: "#f0f0f0" }}/>
           <Panel position="top-right" className="flex gap-3 p-3 rounded-lg">
-            <button 
+            <button
               className="px-5 py-2.5 text-white bg-gradient-to-r from-[#6f609e] to-[#7c778a] rounded-xl shadow-md hover:scale-105 transition-all duration-200"
               onClick={addNewNote}
-            >Add Note</button>
-            <button 
+            >
+              Add Note
+            </button>
+            <button
               className="p-2.5 text-white bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-md hover:scale-105 transition-all duration-200"
               onClick={logout}
             >
-              <LogOut className='w-5 h-5' />
+              <LogOut className="w-5 h-5" />
             </button>
           </Panel>
         </ReactFlow>

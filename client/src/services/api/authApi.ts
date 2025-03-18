@@ -1,6 +1,5 @@
 import { baseURL } from '../interceptors/api';
 
-
 export const loginUserApi = async (data: any) => {
   try {
     const response = await baseURL.post('/auth/login', data);
@@ -19,5 +18,3 @@ export const createUserApi = async (data: any) => {
     throw error;
   }
 };
-
-

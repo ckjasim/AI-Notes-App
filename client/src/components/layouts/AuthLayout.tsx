@@ -1,12 +1,8 @@
-import { Outlet } from "react-router-dom";
-import Navbar from "../modal/NoteModal";
-
+import { Outlet } from 'react-router-dom';
 const AuthLayout = () => {
   return (
     <div>
-
-        <Outlet />
-   
+      <Outlet />
     </div>
   );
 };

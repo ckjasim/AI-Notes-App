@@ -9,8 +9,6 @@ export class UserService implements IUserService {
   }
   async createUser(attrs: UserAttrs): Promise<any> {
     try {
-      
-      console.log('jjjjjjjjkkkkkkkkkkkkkkkkk')
       return await User.build(attrs).save();
     } catch (error) {
       console.log(error)

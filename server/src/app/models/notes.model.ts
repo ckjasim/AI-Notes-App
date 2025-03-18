@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the attributes required to create a Note
 export interface NoteAttrs {
 
     title: string;
@@ -9,7 +8,6 @@ export interface NoteAttrs {
     position: { x: number; y: number };
 }
 
-// Define the Note document interface
 export interface NoteDoc extends mongoose.Document {
     id: string;
     type: string;
@@ -18,7 +16,6 @@ export interface NoteDoc extends mongoose.Document {
     data: { title: string; content: string };
 }
 
-// Define the Note model interface
 export interface NoteModel extends mongoose.Model<NoteDoc> {
     build(attrs: NoteAttrs): NoteDoc;
 }
