@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2020",                  // Modern JavaScript version
+    "module": "commonjs",               // Node.js module system
+    "strict": true,                     // Enable all strict type-checking options
+    "esModuleInterop": true,            // Support for ES module imports
+    "skipLibCheck": true,               // Skip type checks for declaration files
+    "types": ["node"],                  // Include Node.js type definitions
+    "resolveJsonModule": true           // Support JSON imports
+  }
+}
